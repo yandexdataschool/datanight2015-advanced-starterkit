@@ -121,11 +121,12 @@ class YaContestSubmitter(object):
             r = self.get_result_async(run_id)
             if len(r['result']['tests']) > 0 and r['result']['tests'][0]['verdict'] == 'ok':
                 assert 'score' in r['result']['submission'], "invalid contest response: {}".format(r)
-		score = r['result']['submission']['score']['doubleScore']
+                score = r['result']['submission']['score']['doubleScore']
+                message = r['result']['tests'][0]['message']
                 break
             logging.info("Submission status: {}".format(r['result']['submission']['status']))
             time.sleep(1)
-        return score
+        return score, message
 
 
 class TestStringMethods(unittest.TestCase):
@@ -159,8 +160,8 @@ class TestStringMethods(unittest.TestCase):
             self.assertGreater(r, 0)
 
         time.sleep(1)
-        score = self.contest.get_result()
-        logging.info("score: {}".format(score))
+        score, message = self.contest.get_result()
+        logging.info("score: {}, message: {}".format(score, message))
 
 
 if __name__ == '__main__':
