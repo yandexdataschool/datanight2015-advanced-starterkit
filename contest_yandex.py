@@ -120,7 +120,8 @@ class YaContestSubmitter(object):
         for n_try in xrange(RESULT_TIMEOUT):
             r = self.get_result_async(run_id)
             if len(r['result']['tests']) > 0 and r['result']['tests'][0]['verdict'] == 'ok':
-                score = r['result']['submission']['score']['doubleScore']
+                assert 'score' in r['result']['submission'], "invalid contest response: {}".format(r)
+		score = r['result']['submission']['score']['doubleScore']
                 break
             logging.info("Submission status: {}".format(r['result']['submission']['status']))
             time.sleep(1)
